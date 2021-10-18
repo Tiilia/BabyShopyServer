@@ -9,7 +9,7 @@ const path = "/users"
 const usersRoutes = (app) => {
 
     // * ---------------------------- GET -------------------------------------
-
+    // READ
     // all users
     app.get(path, function (req, res) {
         let request = new sql.Request(dbConnect);
@@ -47,7 +47,8 @@ const usersRoutes = (app) => {
             FROM dbo.[User] as u
             LEFT JOIN dbo.[UserRole] as ur
             ON u.UserRoleId = ur.UserRoleId
-            WHERE u.UserId = ${req.params.id}`,
+            WHERE u.UserId = ${req.params.id}
+        `,
             function (error, result, fields) {
                 if (error) console.error(error);
                 else if (result.length === 0) {
@@ -75,10 +76,11 @@ const usersRoutes = (app) => {
                 N'${content.UserName}',
                 N'${content.Mail}',
                 N'${content.Password}'
-            )`, (error, result) => {
-            if (error) console.error(error);
-            else res.send(result);
-        });
+        )`,
+            (error, result) => {
+                if (error) console.error(error);
+                else res.send(result);
+            });
     });
 
     // UPDATE user
