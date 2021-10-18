@@ -2,13 +2,15 @@
   "name": "babyshopyserver",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "msnodesqlv8": "^2.4.0",
     "mssql": "^7.2.1"
   }

@@ -1,7 +1,7 @@
 var dbConfig = {
     server: "localhost",
     // port: 1433,
-    database: "",
+    database: "BabyShopy",
     driver: "msnodesqlv8",
     options: {
         trustedConnection: true
