@@ -2,6 +2,7 @@
 const usersRoutes = require("./users")
 const categoriesRoutes = require("./categories")
 const productsRoutes = require("./products")
+const authRoutes = require("./auth")
 
 const appRouter = (app) => {
 
@@ -26,5 +27,6 @@ const appRouter = (app) => {
     usersRoutes(app);
     categoriesRoutes(app);
     productsRoutes(app);
+    authRoutes(app);
 };
 module.exports = appRouter;

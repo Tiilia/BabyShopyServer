@@ -2,20 +2,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
-// lien à la db
+// db link
 var dbConnect = require("./dbConnect");
 
-// point d'entrée du serveur
+// defining the Express app
 const app = express();
 
+// adding Helmet to enhance your API's security
+app.use(helmet());
 
-// configuration de expresss avec des paramètres de body-parser pour utiliser le json
+// using bodyParser to parse JSON bodies into JS objects
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+// enabling CORS for all requests
 app.use(cors());
+
+// adding morgan to log HTTP requests
+app.use(morgan('combined'));
+
 
 // création des routes
 const routes = require('./routes/routes.js')(app);

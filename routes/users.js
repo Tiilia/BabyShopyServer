@@ -83,6 +83,7 @@ const usersRoutes = (app) => {
             });
     });
 
+    // * ----------------------------------- UPDATE --------------------------------------------
     // UPDATE user
     // ! need column choice to update
     app.put(`${path}/:id`, (req, res) => {
@@ -102,6 +103,7 @@ const usersRoutes = (app) => {
         });
     });
 
+    // * ----------------------------------- DELETE --------------------------------------------
     // DELETE user
     // ! need to manage foreign key
     app.delete(`${path}/:id`, (req, res) => {
