@@ -51,6 +51,27 @@ const categoriesRoutes = (app) => {
             });
     });
 
+    // by name
+    app.get(`${path}/byName/:name`, function (req, res) {
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            SELECT c.*
+            FROM dbo.[Category] as c
+            WHERE c.NameCategory = '${req.params.name}'
+        `,
+            function (error, result, fields) {
+                if (result.length === 0) {
+                    result = {
+                        reponse: 'error',
+                        error: 'invalid path'
+                    }
+                } else {
+                    result = result.recordset[0];
+                }
+                res.send(result);
+            });
+    });
+
     // * ----------------------------------- POST --------------------------------------------
     // CREATE
 
