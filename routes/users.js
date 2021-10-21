@@ -15,9 +15,9 @@ const usersRoutes = (app) => {
         let request = new sql.Request(dbConnect);
         request.query(`
             SELECT u.UserId,
-                    u.UserName,
-                    u.Mail,
-                    u.[Password],
+                    u.fullName,
+                    u.email,
+                    u.[password],
                     ur.[Role]
             FROM dbo.[User] as u
             LEFT JOIN dbo.[UserRole] as ur
@@ -40,9 +40,9 @@ const usersRoutes = (app) => {
         let request = new sql.Request(dbConnect);
         request.query(`
             SELECT u.UserId,
-                    u.UserName,
-                    u.Mail,
-                    u.[Password],
+                    u.fullName,
+                    u.email,
+                    u.[password],
                     ur.[Role]
             FROM dbo.[User] as u
             LEFT JOIN dbo.[UserRole] as ur
@@ -73,9 +73,9 @@ const usersRoutes = (app) => {
             INSERT INTO dbo.[User] 
             VALUES(
                 2,
-                N'${content.UserName}',
-                N'${content.Mail}',
-                N'${content.Password}'
+                N'${content.fullName}',
+                N'${content.email}',
+                N'${content.password}'
         )`,
             (error, result) => {
                 if (error) console.error(error);
@@ -93,9 +93,9 @@ const usersRoutes = (app) => {
         request.query(`
             UPDATE dbo.[User] as u
             SET UserRoleId = ${content.UserRoleId},
-                UserName = N'${content.UserName}',
-                Mail = N'${content.Mail}',
-                Password = N'${content.Password}'
+                fullName = N'${content.fullName}',
+                email = N'${content.email}',
+                password = N'${content.password}'
             WHERE u.UserId = ${req.params.id}
         `, (error, result) => {
             if (error) console.error(error);
