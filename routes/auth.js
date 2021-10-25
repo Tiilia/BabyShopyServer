@@ -19,8 +19,6 @@ const authRoutes = (app) => {
 
     // ? ---------------------------- LOGIN -------------------------------------
     app.post(`${path}/sign-in`, async function (req, res, next) {
-
-
         let {
             email,
             password
@@ -31,9 +29,15 @@ const authRoutes = (app) => {
 
         let request = new sql.Request(dbConnect);
         request.query(`
-                SELECT u.email
-                FROM dbo.[User] as u
-                WHERE u.email = '${email}' and u.password = HASHBYTES ('SHA2_256', N'${password}')
+            SELECT u.email,
+                   u.fullName,
+                   u.registerDate,
+                   u.UserId,
+                   ur.Role          
+            FROM dbo.[User] as u
+            LEFT JOIN dbo.UserRole as ur
+            ON ur.UserRoleId = u.UserRoleId
+            WHERE u.email = '${email}' and u.password = HASHBYTES ('SHA2_256', N'${password}')
             `,
             (error, result, fields) => {
                 if (error) console.error(error);
@@ -44,6 +48,7 @@ const authRoutes = (app) => {
                     }, 'secret', {
                         expiresIn: 120 * 60
                       })
+                    console.log(result.recordset[0])
                     console.log(token)
                     res.send({
                         "token": token
@@ -71,14 +76,20 @@ const authRoutes = (app) => {
         // })
 
         // Create user in database
+        // output inserted.email, inserted.fullName, '*******' as password 
         request.query(`
             INSERT INTO dbo.[User] 
-            output inserted.email, inserted.fullname, '*******' as password 
+            output  inserted.email, 
+                    inserted.fullName, 
+                    inserted.registerDate,
+                    inserted.UserId,
+                    'user' as Role
             VALUES(
                 2,
                 N'${content.fullName}',
                 N'${content.email}',
-                HASHBYTES ('SHA2_256', N'${content.password}')
+                HASHBYTES ('SHA2_256', N'${content.password}'),
+                GETDATE()
         )`,
             (error, result) => {
                 if (error) console.error(error);
@@ -104,6 +115,12 @@ const authRoutes = (app) => {
         // return new user
         // res.status(201)
     });
+
+    // ? ---------------------------- LOGOUT -------------------------------------
+    app.post(`${path}/sign-out`, (req, res) => {
+       res.send({ token: ""})
+    })
+
 
     // ? ---------------------------- REQUEST PASS-------------------------------------
     // ? ---------------------------- RESET PASS -------------------------------------
