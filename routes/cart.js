@@ -11,11 +11,12 @@ const cartRoutes = (app) => {
     // * ---------------------------- GET -------------------------------------
     // READ
     // cart by userId
-    app.get(`${path}/byId/:id`, function (req, res) {
+    app.get(`${path}/byUserId/:id`, function (req, res) {
         let request = new sql.Request(dbConnect);
         request.query(`
         SELECT  b.UserId,
                 b.BasketId,
+                bd.BasketDetailsId,
                 p.ProductId,
                 p.NameProduct,
                 p.UnitIntStock,
@@ -36,9 +37,60 @@ const cartRoutes = (app) => {
                         error: 'invalid path'
                     }
                 } else {
-                    result = result.recordset[0];
+                    result = result.recordset;
                 }
                 res.send(result);
+            });
+    });
+
+    // * ----------------------------------- POST --------------------------------------------
+    // ? ADD product in cart ---------------------------------------------------
+    app.post(`${path}/add`, (req, res) => {
+        let content = req.body;
+        console.log(content);
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            INSERT INTO dbo.BasketDetails VALUES (
+                ${content.BasketId},
+                NULL,
+                ${content.ProductId},
+                ${content.Quantity}
+                )
+            `,
+            (error, result) => {
+                if (error) console.error(error);
+                else res.send(result);
+            });
+    });
+
+    // ? UPDATE quantity ---------------------------------------------------------
+    app.post(`${path}/update`, (req, res) => {
+        let content = req.body;
+        console.log(content);
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            UPDATE dbo.BasketDetails
+            SET Quantity = ${content.Quantity}
+            WHERE BasketDetailsId = ${content.BasketDetailsId}
+            `,
+            (error, result) => {
+                if (error) console.error(error);
+                else res.send(result);
+            });
+    });
+
+    // ? DELETE product ----------------------------------------------------------
+    app.post(`${path}/delete`, (req, res) => {
+        let content = req.body;
+        console.log(content);
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            DELETE FROM dbo.BasketDetails
+            WHERE BasketDetailsId = ${content.BasketDetailsId}
+            `,
+            (error, result) => {
+                if (error) console.error(error);
+                else res.send(result);
             });
     });
 };
