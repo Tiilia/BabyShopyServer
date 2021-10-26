@@ -3,6 +3,7 @@ const usersRoutes = require("./users")
 const categoriesRoutes = require("./categories")
 const productsRoutes = require("./products")
 const authRoutes = require("./auth")
+const cartRoutes = require("./cart")
 
 const appRouter = (app) => {
 
@@ -28,5 +29,6 @@ const appRouter = (app) => {
     categoriesRoutes(app);
     productsRoutes(app);
     authRoutes(app);
+    cartRoutes(app);
 };
 module.exports = appRouter;

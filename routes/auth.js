@@ -18,12 +18,11 @@ const authRoutes = (app) => {
 
 
     // ? ---------------------------- LOGIN -------------------------------------
-    app.post(`${path}/sign-in`, async function (req, res, next) {
+    app.post(`${path}/sign-in`, async function (req, res) {
         let {
             email,
             password
         } = req.body;
-        // const hashed_password = md5(password.toString())
 
         console.log("ok")
 
@@ -82,7 +81,7 @@ const authRoutes = (app) => {
             output  inserted.email, 
                     inserted.fullName, 
                     inserted.registerDate,
-                    inserted.UserId,
+                    inserted.UserId as userId,
                     'user' as Role
             VALUES(
                 2,
@@ -90,7 +89,12 @@ const authRoutes = (app) => {
                 N'${content.email}',
                 HASHBYTES ('SHA2_256', N'${content.password}'),
                 GETDATE()
-        )`,
+            )
+            INSERT INTO dbo.Basket
+            --output inserted.BasketId
+            VALUES (
+                (SELECT max(UserId) FROM [User])
+            )`,
             (error, result) => {
                 if (error) console.error(error);
                 else {
