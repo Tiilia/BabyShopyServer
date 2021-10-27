@@ -63,7 +63,7 @@ const cartRoutes = (app) => {
                         error: 'invalid path'
                     }
                 } else {
-                    result = result.recordset;
+                    result = result.recordset[0];
                 }
                 res.send(result);
             });
