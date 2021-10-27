@@ -42,6 +42,33 @@ const cartRoutes = (app) => {
                 res.send(result);
             });
     });
+    // get grandTotal
+    // READ
+    // cart by userId
+    app.get(`${path}/priceTotalbyUserId/:id`, function (req, res) {
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            SELECT SUM((p.UnitSalePrice - COALESCE(p.Discount, 0)) * bd.Quantity) as GrandTotal
+            FROM dbo.Basket as b
+            FULL JOIN dbo.BasketDetails as bd
+            ON b.BasketId = bd.BasketId
+            LEFT JOIN dbo.Product as p
+            ON p.ProductId = bd.ProductId
+            WHERE b.UserId = ${req.params.id}
+        `,
+            function (error, result, fields) {
+                if (result.length === 0) {
+                    result = {
+                        reponse: 'error',
+                        error: 'invalid path'
+                    }
+                } else {
+                    result = result.recordset;
+                }
+                res.send(result);
+            });
+    });
+
 
     // * ----------------------------------- POST --------------------------------------------
     // ? ADD product in cart ---------------------------------------------------
@@ -87,6 +114,20 @@ const cartRoutes = (app) => {
         request.query(`
             DELETE FROM dbo.BasketDetails
             WHERE BasketDetailsId = ${content.BasketDetailsId}
+            `,
+            (error, result) => {
+                if (error) console.error(error);
+                else res.send(result);
+            });
+    });
+    // DELETE ALL -------------------------------------------------------------------
+    app.post(`${path}/deleteAll`, (req, res) => {
+        let content = req.body;
+        console.log(content);
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            DELETE FROM dbo.BasketDetails
+            WHERE BasketId = ${content.BasketId}
             `,
             (error, result) => {
                 if (error) console.error(error);
