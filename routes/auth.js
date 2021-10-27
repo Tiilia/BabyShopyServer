@@ -28,14 +28,17 @@ const authRoutes = (app) => {
 
         let request = new sql.Request(dbConnect);
         request.query(`
-            SELECT u.email,
-                   u.fullName,
-                   u.registerDate,
-                   u.UserId,
-                   ur.Role          
+            SELECT  u.email,
+                    u.fullName,
+                    u.registerDate,
+                    u.UserId,
+                    ur.[Role],
+                    b.BasketId
             FROM dbo.[User] as u
             LEFT JOIN dbo.UserRole as ur
             ON ur.UserRoleId = u.UserRoleId
+            LEFT JOIN dbo.Basket as b
+            ON b.UserId = u.UserId
             WHERE u.email = '${email}' and u.password = HASHBYTES ('SHA2_256', N'${password}')
             `,
             (error, result, fields) => {
@@ -91,7 +94,7 @@ const authRoutes = (app) => {
                 GETDATE()
             )
             INSERT INTO dbo.Basket
-            --output inserted.BasketId
+            output inserted.BasketId
             VALUES (
                 (SELECT max(UserId) FROM [User])
             )`,
