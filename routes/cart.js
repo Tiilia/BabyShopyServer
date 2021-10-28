@@ -106,7 +106,7 @@ const cartRoutes = (app) => {
             });
     });
 
-    // ? DELETE product ----------------------------------------------------------
+    // ? DELETE one product ----------------------------------------------------------
     app.post(`${path}/delete`, (req, res) => {
         let content = req.body;
         console.log(content);

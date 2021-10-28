@@ -4,6 +4,7 @@ const categoriesRoutes = require("./categories")
 const productsRoutes = require("./products")
 const authRoutes = require("./auth")
 const cartRoutes = require("./cart")
+const coutriesRoutes = require("./countries")
 
 const appRouter = (app) => {
 
@@ -30,5 +31,6 @@ const appRouter = (app) => {
     productsRoutes(app);
     authRoutes(app);
     cartRoutes(app);
+    coutriesRoutes(app);
 };
 module.exports = appRouter;
