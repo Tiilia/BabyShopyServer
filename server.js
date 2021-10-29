@@ -27,10 +27,19 @@ app.use(cors());
 app.use(morgan('combined'));
 
 
-// création des routes
-const routes = require('./routes/routes.js')(app);
-
 // lancement du serveur au port 3000
 const server = app.listen(3000, () => {
-    console.log('listening on port %s...', server.address().port);
+    console.log('listening on port %s :)', server.address().port);
 });
+
+const socket = require('socket.io')(server);
+
+
+
+
+socket.on('connection', socket =>{
+    console.log('Socket: client connected')
+});
+
+// création des routes
+const routes = require('./routes/routes.js')(app, socket);

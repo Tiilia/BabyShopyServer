@@ -6,7 +6,7 @@ const authRoutes = require("./auth")
 const cartRoutes = require("./cart")
 const coutriesRoutes = require("./countries")
 
-const appRouter = (app) => {
+const appRouter = (app,sock) => {
 
     app.get('/', (req, res) => {
         res.send(`
@@ -30,7 +30,7 @@ const appRouter = (app) => {
     categoriesRoutes(app);
     productsRoutes(app);
     authRoutes(app);
-    cartRoutes(app);
+    cartRoutes(app,sock);
     coutriesRoutes(app);
 };
 module.exports = appRouter;

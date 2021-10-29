@@ -6,7 +6,7 @@ const sql = require('mssql/msnodesqlv8');
 
 const path = "/cart"
 
-const cartRoutes = (app) => {
+const cartRoutes = (app, sock) => {
 
     // * ---------------------------- GET -------------------------------------
     // READ
@@ -74,6 +74,8 @@ const cartRoutes = (app) => {
     // ? ADD product in cart ---------------------------------------------------
     app.post(`${path}/add`, (req, res) => {
         let content = req.body;
+        console.log(`------ post: ${content}`);
+        const notify = {data: content}
         console.log(content);
         let request = new sql.Request(dbConnect);
         request.query(`
@@ -86,14 +88,16 @@ const cartRoutes = (app) => {
             `,
             (error, result) => {
                 if (error) console.error(error);
-                else res.send(result);
+                else res.send(notify);
             });
     });
 
     // ? UPDATE quantity ---------------------------------------------------------
     app.post(`${path}/update`, (req, res) => {
         let content = req.body;
-        console.log(content);
+        console.log(`------ post: ${content}`);
+        const notify = {data: content}
+        sock.emit('notification', notify)
         let request = new sql.Request(dbConnect);
         request.query(`
             UPDATE dbo.BasketDetails
@@ -102,13 +106,17 @@ const cartRoutes = (app) => {
             `,
             (error, result) => {
                 if (error) console.error(error);
-                else res.send(result);
+                else {
+                    console.log(`---------- result: ${result.rowsAffected}`)
+                    res.send(notify)};
             });
     });
 
     // ? DELETE one product ----------------------------------------------------------
     app.post(`${path}/delete`, (req, res) => {
         let content = req.body;
+        console.log(`------ post: ${content}`);
+        const notify = {data: content}
         console.log(content);
         let request = new sql.Request(dbConnect);
         request.query(`
@@ -117,12 +125,14 @@ const cartRoutes = (app) => {
             `,
             (error, result) => {
                 if (error) console.error(error);
-                else res.send(result);
+                else res.send(notify);
             });
     });
     // DELETE ALL -------------------------------------------------------------------
     app.post(`${path}/deleteAll`, (req, res) => {
         let content = req.body;
+        console.log(`------ post: ${content}`);
+        const notify = {data: content}
         console.log(content);
         let request = new sql.Request(dbConnect);
         request.query(`
@@ -131,7 +141,7 @@ const cartRoutes = (app) => {
             `,
             (error, result) => {
                 if (error) console.error(error);
-                else res.send(result);
+                else res.send(notify);
             });
     });
 };
