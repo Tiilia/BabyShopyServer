@@ -1,10 +1,12 @@
 // routes declarations
-const usersRoutes = require("./users")
-const categoriesRoutes = require("./categories")
-const productsRoutes = require("./products")
-const authRoutes = require("./auth")
-const cartRoutes = require("./cart")
-const coutriesRoutes = require("./countries")
+const usersRoutes = require("./users");
+const categoriesRoutes = require("./categories");
+const productsRoutes = require("./products");
+const authRoutes = require("./auth");
+const cartRoutes = require("./cart");
+const coutriesRoutes = require("./countries");
+const ordersRoutes = require("./orders");
+const usersAddressesRoutes = require("./usersAddresses");
 
 const appRouter = (app,sock) => {
 
@@ -32,5 +34,7 @@ const appRouter = (app,sock) => {
     authRoutes(app);
     cartRoutes(app,sock);
     coutriesRoutes(app);
+    ordersRoutes(app);
+    usersAddressesRoutes(app);
 };
 module.exports = appRouter;
