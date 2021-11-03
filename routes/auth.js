@@ -91,7 +91,15 @@ const authRoutes = (app) => {
                 N'${content.fullName}',
                 N'${content.email}',
                 HASHBYTES ('SHA2_256', N'${content.password}'),
-                GETDATE()
+                GETDATE(),
+                NULL, 
+                NULL, 
+                NULL, 
+                NULL, 
+                NULL, 
+                NULL, 
+                NULL
+                
             )
             INSERT INTO dbo.Basket
             output inserted.BasketId
