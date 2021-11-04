@@ -35,6 +35,33 @@ const usersAddressesRoutes = (app) => {
             res.send(result);
         })
     })
+    // add address / update address
+    app.post(`${path}`, (req, res) => {
+        let content = req.body;
+        console.log(content);
+        let request = new sql.Request(dbConnect);
+        request.query(`
+            UPDATE dbo.[User]
+            SET FirstName = '${content.FirstName}',
+                LastName = '${content.LastName}',
+                [Address] = '${content.Address}',
+                AddressNumber = '${content.AddressNumber}',
+                City = '${content.City}',
+                PostalCode = ${content.PostalCode},
+                CountryId = (
+                    SELECT c.CountryId 
+                    FROM dbo.Country as c 
+                    WHERE c.CountryName = '${content.CountryName}')
+                Where UserId = ${content.UserId}
+        `, (error, result) =>{
+            if(error) console.log(error);
+            else{
+                res.send(result.rowsAffected)
+            }
+        })
+    })
+    // 
+
 
 };
 module.exports = usersAddressesRoutes;
